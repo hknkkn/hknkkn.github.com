@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<title>hakan's home</title>
+<script language="javascript" src="static/rotator.js"></script>
+<script language="javascript">
+
+var images_base = 'static';
+var rot;
+
+function initanim(divname,size) {
+    var container = document.getElementById(divname);
+
+    var buttons = document.createElement('div');
+    buttons.style.position = 'absolute';
+    buttons.style.top = '0px';
+    buttons.style.left = '0px';
+    buttons.style.whiteSpace = 'nowrap';
+    buttons.style.zIndex = '100';
+    container.appendChild(buttons);
+
+    var startBut = document.createElement('input');
+    startBut.type = 'button';
+    startBut.value = 'start';
+    buttons.appendChild(startBut);
+
+    var stepBut = document.createElement('input');
+    stepBut.type = 'button';
+    stepBut.value = 'step';
+    buttons.appendChild(document.createElement('br'));
+    buttons.appendChild(stepBut);
+
+    var images = document.createElement('div');
+    images.style.position = 'absolute';
+    images.style.top = '0px';
+    images.style.left = '0px';
+    images.style.zIndex = '-10';
+    container.appendChild(images);
+       
+    var wheel = new Image();
+    wheel.src = images_base + '/wheel.png';
+    if(size) wheel.height = wheel.width = size;
+    wheel.className = 'stacked';
+    images.appendChild(wheel);
+
+    var circle = new Image();
+    circle.src = images_base + '/circle.png';
+    if(size) circle.height = circle.width = size;
+    circle.className = 'stacked';
+    images.appendChild(circle);
+
+    var broken_L = new Image();
+    broken_L.src = images_base + '/broken_L.png';
+    if(size) broken_L.height = broken_L.width = size;
+    broken_L.className = 'stacked';
+    images.appendChild(broken_L);
+
+    var broken_R = new Image();
+    broken_R.src = images_base + '/broken_R.png';
+    if(size) broken_R.height = broken_R.width = size;
+    broken_R.className = 'stacked';
+    images.appendChild(broken_R);
+  
+//    wheel.style.zIndex = '10';
+    
+    rot = new ROT(40);
+    rot.add(wheel,-3);
+    rot.add(circle,0.5);
+    rot.add(broken_L,-0.6);
+    rot.add(broken_R,0.7);
+
+    startBut.onclick = function() {
+        if(!rot.isRotating()) {
+            startBut.value = 'stop';
+            stepBut.disabled = true;
+            rot.start();
+        } else {
+            rot.stop();
+            stepBut.disabled = false;
+            startBut.value = 'start';
+        }
+    }
+    stepBut.onclick = function() {
+        rot.step(); 
+    }
+    return rot;
+}
+
+window.onload = function(){
+    initanim('anim1');
+}
+</script>
+<style>
+body{
+ background-image:url('static/bg.png');
+ color:#DEDEDE;
+ font-family: Arial, Verdana, Sans;
+ font-size:12px;
+}
+a,a:visited{
+ color:#DEDEDE;
+}
+
+.stacked{
+ position:absolute;
+ top:0px;
+ left:0px;
+}
+#info{
+ position:relative;
+ margin-top:100px;
+ text-align:center;
+}
+#anim1{
+ position:relative;
+ margin-top:20px;
+ margin-left:auto;
+ margin-right:auto;
+ width:400px;
+}
+input {
+  border:1px solid black;
+  background-color:#1a1a1a;
+  color:#DEDEDE;
+}
+</style>
+</head>
+<body bgcolor="#1a1a1a">
+<div id="info">
+<script lang="javascript">
+	// 1:h 2:k 3:n 4:a
+	var obfuscated = '123@1424342243.com';
+	var nonobfuscated = obfuscated.replace(/1/g,'h').replace(/2/g,'k').replace(/3/g,'n').replace(/4/g,'a');
+	document.write('<a href="mailto:' + nonobfuscated + '">email</a> | ');
+</script>
+<a href="http://infohost.nmt.edu/~hakkan/portfolio/resume.php" target="resume">resume</a>
+</div>
+<div id="anim1"></div>
+
+</body>
+</html>
