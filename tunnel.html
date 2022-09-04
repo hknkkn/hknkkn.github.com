@@ -12,7 +12,7 @@
   }
 
   html, body {
-  	background-color: black;
+    background-color: black;
     height: 100%;
     width: 100%;
     overflow: hidden;
@@ -46,20 +46,20 @@
     transform-style: preserve-3d;
     clip-path: polygon(
       150px 50px, 250px 50px,
-  		250px 150px, 350px 150px,
-  		350px 250px, 250px 250px,
-  		250px 350px, 150px 350px,
-  		150px 250px, 50px 250px,
-  		50px 150px, 150px 150px,
-  		150px 50px,
-  		/* inner */
-  		160px 60px, 160px 160px,
-  		60px 160px, 60px 240px,
-  		160px 240px, 160px 340px,
-  		240px 340px, 240px 240px,
-  		340px 240px, 340px 160px,
-  		240px 160px, 240px 60px,
-  		160px 60px, 150px 50px
+      250px 150px, 350px 150px,
+      350px 250px, 250px 250px,
+      250px 350px, 150px 350px,
+      150px 250px, 50px 250px,
+      50px 150px, 150px 150px,
+      150px 50px,
+      /* inner */
+      160px 60px, 160px 160px,
+      60px 160px, 60px 240px,
+      160px 240px, 160px 340px,
+      240px 340px, 240px 240px,
+      340px 240px, 340px 160px,
+      240px 160px, 240px 60px,
+      160px 60px, 150px 50px
     );
   }
 
@@ -96,36 +96,36 @@
 
     clip-path: polygon(
       0px 0px, 400px 0px,
-  		400px 400px, 0px 400px,
-  		0px 0px,
-  		/* inner */
-  		160px 60px, 160px 160px,
-  		60px 160px, 60px 240px,
-  		160px 240px, 160px 340px,
-  		240px 340px, 240px 240px,
-  		340px 240px, 340px 160px,
-  		240px 160px, 240px 60px,
-  		160px 60px, 0px 0px
+      400px 400px, 0px 400px,
+      0px 0px,
+      /* inner */
+      160px 60px, 160px 160px,
+      60px 160px, 60px 240px,
+      160px 240px, 160px 340px,
+      240px 340px, 240px 240px,
+      340px 240px, 340px 160px,
+      240px 160px, 240px 60px,
+      160px 60px, 0px 0px
     );
   }
 
   @keyframes fly {
     0% {
      transform: translateZ(-5000px);
-  	 opacity:0%;
+     opacity:0%;
     }
 
-  	8% {
-  		opacity:100%;
-  	}
+    8% {
+      opacity:100%;
+    }
 
-  	97% {
-  		opacity: 100%
-  	}
+    97% {
+      opacity: 100%
+    }
 
     100% {
       transform: translateZ(480px);
-  		opacity: 0%;
+      opacity: 0%;
     }
   }
 
@@ -229,9 +229,9 @@ root.addEventListener("mouseup", onDragStop);
     <div id="output-wrapper">
       <section id="output">
         <div class="wrap-fly">
-        	<div class="wrap-bend">
-        		<div class="plus"></div>
-        	</div>
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
         </div>
         <div class="wrap-fly">
           <div class="wrap-bend">
