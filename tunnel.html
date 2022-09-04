@@ -206,10 +206,12 @@ function onDragStart(event) {
   dragData.startBendX = dragData.bendX;
   dragData.startBendY = dragData.bendY;
   root.addEventListener("mousemove", onDrag);
+  root.addEventListener("touchmove", onDrag);
 }
 
 function onDragStop(event) {
   root.removeEventListener("mousemove", onDrag);
+  root.removeEventListener("touchmove", onDrag);
   if (dragData.startBendX == dragData.bendX && dragData.startBendY == dragData.bendY) {
      let newState = root.style.getPropertyValue("--play-state") == "running" ? "paused" : "running";
     root.style.setProperty("--play-state", newState);
@@ -220,7 +222,9 @@ root.style.setProperty("--play-state", "running");
 root.style.setProperty("--bend-x", dragData.bendX);
 root.style.setProperty("--bend-y", dragData.bendY);
 root.addEventListener("mousedown", onDragStart);
+root.addEventListener("touchstart", onDragStart);
 root.addEventListener("mouseup", onDragStop);
+root.addEventListener("touchend", onDragStop);
 
 </script>
 </head>
