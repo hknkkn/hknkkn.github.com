@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+  :root {
+    --bend-x: 0;
+    --bend-y: 0;
+    --anim-len: 1.3s;
+    --item-count: 12;
+    --play-state: running;
+  }
+
+  html, body {
+  	background-color: black;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  #output-wrapper {
+    margin: auto;
+    width: 500px;
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #output {
+    perspective: 500px;
+    perspective-origin: 245px 255px;
+    transform-style: preserve-3d;
+    display: block;
+  }
+
+  .plus {
+    width: 400px;
+    height: 400px;
+    background: green;
+    transform-style: preserve-3d;
+    clip-path: polygon(
+      150px 50px, 250px 50px,
+  		250px 150px, 350px 150px,
+  		350px 250px, 250px 250px,
+  		250px 350px, 150px 350px,
+  		150px 250px, 50px 250px,
+  		50px 150px, 150px 150px,
+  		150px 50px,
+  		/* inner */
+  		160px 60px, 160px 160px,
+  		60px 160px, 60px 240px,
+  		160px 240px, 160px 340px,
+  		240px 340px, 240px 240px,
+  		340px 240px, 340px 160px,
+  		240px 160px, 240px 60px,
+  		160px 60px, 150px 50px
+    );
+  }
+
+  .plus::before {
+    content: "";
+    height: 100%;
+    width: 100%;
+    display: block;
+    background-color: turquoise;
+    opacity: 0%;
+    animation: pulse var(--anim-len) calc(0.5 * var(--nth-child) / var(--item-count) * var(--anim-len)) linear infinite none reverse;
+  }
+
+  .wrap-fly {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    animation: fly var(--anim-len) calc(var(--nth-child) / var(--item-count) * var(--anim-len)) linear infinite var(--play-state);
+    opacity: 0%;
+  }
+
+  .wrap-bend {
+    position: absolute;
+    animation: bend var(--anim-len) calc(var(--nth-child) / var(--item-count) * var(--anim-len)) ease-out infinite var(--play-state);
+  }
+
+  .wrap-bend::before {
+    content: "";
+    width: 400px;
+    height: 400px;
+    background: #112110;
+    position:absolute;
+    display: block;
+
+    clip-path: polygon(
+      0px 0px, 400px 0px,
+  		400px 400px, 0px 400px,
+  		0px 0px,
+  		/* inner */
+  		160px 60px, 160px 160px,
+  		60px 160px, 60px 240px,
+  		160px 240px, 160px 340px,
+  		240px 340px, 240px 240px,
+  		340px 240px, 340px 160px,
+  		240px 160px, 240px 60px,
+  		160px 60px, 0px 0px
+    );
+  }
+
+  @keyframes fly {
+    0% {
+     transform: translateZ(-5000px);
+  	 opacity:0%;
+    }
+
+  	8% {
+  		opacity:100%;
+  	}
+
+  	97% {
+  		opacity: 100%
+  	}
+
+    100% {
+      transform: translateZ(480px);
+  		opacity: 0%;
+    }
+  }
+
+  @keyframes bend {
+    0% {
+      transform:
+        translateX(calc(+1 * var(--bend-x) * 850px))
+        translateY(calc(+1 * var(--bend-y) * 850px))
+        rotateX(calc(-1 * var(--bend-y) * 40deg))
+        rotateY(calc(+1 * var(--bend-x) * 40deg));
+    }
+
+    96% {
+      transform:
+        translateX(calc(+1 * var(--bend-x) * 10px))
+        translateY(calc(+1 * var(--bend-y) * 10px))
+        rotateX(calc(-1 * var(--bend-y) * 2deg))
+        rotateY(calc(+1 * var(--bend-x) * 2deg));
+    }
+
+    100% {
+      transform:
+        translateX(calc(+1 * var(--bend-x) * 30px))
+        translateY(calc(+1 * var(--bend-y) * 30px))
+        rotateX(calc(+1 * var(--bend-y) * 3deg))
+        rotateY(calc(-1 * var(--bend-x) * 3deg));
+    }
+  }
+
+  @keyframes pulse {
+    0% { opacity: 0%; }
+    5% { opacity: 100%; }
+    10% { opacity: 0%; }
+    50% { opacity: 0%; }
+    55% { opacity: 100%; }
+    60% { opacity: 0%; }
+  }
+
+  div.wrap-fly:nth-child(1) { --nth-child: 1 }
+  div.wrap-fly:nth-child(2) { --nth-child: 2 }
+  div.wrap-fly:nth-child(3) { --nth-child: 3 }
+  div.wrap-fly:nth-child(4) { --nth-child: 4 }
+  div.wrap-fly:nth-child(5) { --nth-child: 5 }
+  div.wrap-fly:nth-child(6) { --nth-child: 6 }
+  div.wrap-fly:nth-child(7) { --nth-child: 7 }
+  div.wrap-fly:nth-child(8) { --nth-child: 8 }
+  div.wrap-fly:nth-child(9) { --nth-child: 9 }
+  div.wrap-fly:nth-child(10) { --nth-child: 10 }
+  div.wrap-fly:nth-child(11) { --nth-child: 11 }
+  div.wrap-fly:nth-child(12) { --nth-child: 12 }
+</style>
+
+<script>
+let root = document.documentElement;
+let dragData = {
+  startPosX: 0,
+  startPosY: 0,
+  startBendX: 0,
+  startBendY: 0,
+  bendX: 0.15,
+  bendY: 0.2
+};
+
+function onDrag(event) {
+  // moving cursor 8th of a screen is a full bend
+  let deltaX = (event.clientX - dragData.startPosX) / screen.width * 8;
+  let deltaY = (event.clientY - dragData.startPosY) / screen.height * 8;
+  dragData.bendX = Math.min(1, Math.max(-1, dragData.startBendX + deltaX));
+  dragData.bendY = Math.min(1, Math.max(-1, dragData.startBendY + deltaY));
+  root.style.setProperty("--bend-x", dragData.bendX);
+  root.style.setProperty("--bend-y", dragData.bendY);
+}
+
+function onDragStart(event) {
+  event.preventDefault();
+  dragData.startPosX = event.clientX;
+  dragData.startPosY = event.clientY;
+  dragData.startBendX = dragData.bendX;
+  dragData.startBendY = dragData.bendY;
+  root.addEventListener("mousemove", onDrag);
+}
+
+function onDragStop(event) {
+  root.removeEventListener("mousemove", onDrag);
+  if (dragData.startBendX == dragData.bendX && dragData.startBendY == dragData.bendY) {
+     let newState = root.style.getPropertyValue("--play-state") == "running" ? "paused" : "running";
+    root.style.setProperty("--play-state", newState);
+  }
+}
+
+root.style.setProperty("--play-state", "running");
+root.style.setProperty("--bend-x", dragData.bendX);
+root.style.setProperty("--bend-y", dragData.bendY);
+root.addEventListener("mousedown", onDragStart);
+root.addEventListener("mouseup", onDragStop);
+
+</script>
+</head>
+<body>
+  <div id="container">
+    <div id="output-wrapper">
+      <section id="output">
+        <div class="wrap-fly">
+        	<div class="wrap-bend">
+        		<div class="plus"></div>
+        	</div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="wrap-fly">
+          <div class="wrap-bend">
+            <div class="plus"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
