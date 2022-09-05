@@ -16,6 +16,7 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    touch-action: none;
   }
 
   #container {
@@ -186,13 +187,12 @@ let dragData = {
   startBendX: 0,
   startBendY: 0,
   bendX: 0.15,
-  bendY: 0.2,
-  dragStarted: false
+  bendY: 0.2
 };
 
 function onDrag(event) {
-  // moving cursor 8th of a screen is a full bend
   event.preventDefault();
+  // moving cursor 8th of a screen is a full bend
   let deltaX = ((event.clientX || event.changedTouches[0].clientX) - dragData.startPosX) / screen.width * 8;
   let deltaY = ((event.clientY || event.changedTouches[0].clientY) - dragData.startPosY) / screen.height * 8;
   dragData.bendX = Math.min(1, Math.max(-1, dragData.startBendX + deltaX));
@@ -203,10 +203,6 @@ function onDrag(event) {
 
 function onDragStart(event) {
   event.preventDefault();
-  if (dragData.dragStarted) {
-    return;
-  }
-  dragData.dragStarted = true;
   dragData.startPosX = event.clientX || event.changedTouches[0].clientX;
   dragData.startPosY = event.clientY || event.changedTouches[0].clientY;
   dragData.startBendX = dragData.bendX;
@@ -217,10 +213,6 @@ function onDragStart(event) {
 
 function onDragStop(event) {
   event.preventDefault();
-  if (!dragData.dragStarted) {
-    return;
-  }
-  dragData.dragStarted = false;
   root.removeEventListener("mousemove", onDrag);
   root.removeEventListener("touchmove", onDrag);
   if (dragData.startBendX == dragData.bendX && dragData.startBendY == dragData.bendY) {
